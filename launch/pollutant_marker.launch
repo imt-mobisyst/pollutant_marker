@@ -1,0 +1,3 @@
+<launch>
+    <node name="pollutant_marker_node" pkg="pollutant_marker" type="pollutant_marker_node" output="screen" />
+</launch>
