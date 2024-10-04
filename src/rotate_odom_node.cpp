@@ -10,6 +10,7 @@ void odomCallback(const nav_msgs::Odometry::ConstPtr& msg) {
     nav_msgs::Odometry transformed_odom = *msg;
 
     // NED to ENU conversion
+    // https://github.com/mavlink/mavros/issues/49
     double ned_x = msg->pose.pose.position.x;
     double ned_y = msg->pose.pose.position.y;
     double ned_z = msg->pose.pose.position.z;

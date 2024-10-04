@@ -8,21 +8,21 @@
 #include <vector>
 
 // First pollutant pose
-double pol1_dist_x = -14.2;
-double pol1_dist_y = 7.2;
+double pol1_dist_x = 1.0;
+double pol1_dist_y = -35.0;
 
 // Second pollutant pose
-double pol2_dist_x = 2.4;
-double pol2_dist_y = -35.0;
+double pol2_dist_x = -49.5;
+double pol2_dist_y = -22.0;
 
 // Third pollutant pose
-double pol3_dist_x = 28.7;
-double pol3_dist_y = -21.7;
+double pol3_dist_x = -17.0;
+double pol3_dist_y = 5.0;
 
 // Threshold for Euclidean distance
 double threshold_dist_1 = 15.0;
-double threshold_dist_2 = 4.5;
-double threshold_dist_3 = 2.5;
+double threshold_dist_2 = 3;
+double threshold_dist_3 = 1;
 
 ros::Publisher marker_array_pub;
 visualization_msgs::MarkerArray marker_array; // Store marker array
@@ -72,6 +72,8 @@ void odomCallback(const nav_msgs::Odometry::ConstPtr& msg) {
     marker.header.frame_id = "odom";
     marker.header.stamp = ros::Time::now();
     marker.ns = "marker_namespace";
+    if(marker_id > 1000)
+        marker_id = 0;
     marker.id = marker_id++; // Unique ID for each marker
     marker.type = visualization_msgs::Marker::SPHERE;
     marker.action = visualization_msgs::Marker::ADD;
@@ -93,7 +95,7 @@ void odomCallback(const nav_msgs::Odometry::ConstPtr& msg) {
         marker.color.g = 1.0;
         marker.color.b = 0.0; // Green for safe
         marker.color.a = 1.0;
-        ROS_INFO("Robot is in the safe zone...");
+        // ROS_INFO("Robot is in the safe zone...");
     } else if (((distance_1 > threshold_dist_2) && (distance_1 < threshold_dist_1)) || 
                ((distance_2 > threshold_dist_2) && (distance_2 < threshold_dist_1)) || 
                ((distance_3 > threshold_dist_2) && (distance_3 < threshold_dist_1))) {
@@ -101,12 +103,12 @@ void odomCallback(const nav_msgs::Odometry::ConstPtr& msg) {
         marker.color.g = 0.65;
         marker.color.b = 0.0; // Orange for caution
         marker.color.a = 1.0;
-        ROS_WARN("Robot is close to pollutant zone. Publishing orange alert...");
+        // ROS_WARN("Robot is close to pollutant zone. Publishing orange alert...");
     } else {
         marker.color.r = 1.0; // Red for danger
         marker.color.g = 0.0;
         marker.color.a = 1.0;
-        ROS_ERROR("Robot is in pollutant zone. Publishing danger...");
+        // ROS_ERROR("Robot is in pollutant zone. Publishing danger...");
     }
 
     // Append the new marker to the marker array

@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+
+from visualization_msgs.msg import Marker
+from visualization_msgs.msg import MarkerArray
+import rospy
+
+topic = 'visualization_marker_array'
+publisher = rospy.Publisher(topic, MarkerArray,queue_size=10)
+
+rospy.init_node('reset_markers')
+
+marker = Marker()
+marker.id = 0
+marker.ns = "marker_namespace"
+marker.header.frame_id = "/odom"
+marker.action = marker.DELETEALL
+
+markerArray = MarkerArray()
+markerArray.markers.append(marker)
+
+publisher.publish(markerArray)
+
+rospy.sleep(0.01)
